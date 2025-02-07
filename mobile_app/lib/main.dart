@@ -18,14 +18,18 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
-  final Uri _githubRepo = Uri.parse('https://github.com/YOUR_USERNAME/HNG12-Mobile-Desktop');
+  final Uri _githubRepo = Uri.parse('https://github.com/Agimuche/HNG12-Mobile-Desktop');
   final Uri _hngHire = Uri.parse('https://hng.tech/hire');
 
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
 
-  Future<void> _launchUrl(Uri url) async {
-    if (!await launchUrl(url)) {
-      throw 'Could not launch $url';
+  Future<void> _launchUrl(BuildContext context, Uri url) async {
+    if (await canLaunch(url.toString())) {
+      await launchUrl(url);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not launch $url')),
+      );
     }
   }
 
@@ -41,12 +45,12 @@ class HomeScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => _launchUrl(_githubRepo),
+              onPressed: () => _launchUrl(context, _githubRepo),
               child: Text("View GitHub Repository"),
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () => _launchUrl(_hngHire),
+              onPressed: () => _launchUrl(context, _hngHire),
               child: Text("Visit HNG Hire Page"),
             ),
           ],
